@@ -29,3 +29,4 @@ English version? There is "source/text/Font.cpp" in <a href="https://github.com/
 ```
 gcc -std=gnu99 -Wall -pedantic pangocairo_line_skip_sample_ja.c -lm `pkg-config --cflags --libs pangocairo fontconfig`
 ```
+gnu99なのは、putenv()がC99にないから。しかしMS-WindowsやMacOSXなどでも使えるはず。

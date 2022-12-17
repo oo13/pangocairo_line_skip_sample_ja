@@ -330,6 +330,28 @@ int render(const char *text, const char *output_filename, const struct LayoutInf
     /* サーフェスをファイルに出力 */
     cairo_surface_write_to_png(sf, output_filename);
 
+#if 0
+    /*
+      サーフェスをクリアして再利用可能にする。
+      たいていの場合は描画領域はバッファより小さいと仮定して、書いたところだけ消す。
+    */
+    /* ファイル出力したから不要かもしれないけど、念のためすべて書きだす。*/
+    cairo_surface_flush(sf);
+    /* イメージバッファへのポインタを得る */
+    uint32_t *src = (uint32_t*)cairo_image_surface_get_data(sf);
+    /* 消す */
+    const int stride = OUTPUT_WIDTH - text_width;
+    for (int y = 0; y < text_height; y++) {
+        for (int x = 0; x < text_width; x++) {
+            *src = 0;
+            src++;
+        }
+        src += stride;
+    }
+    /* サーフェスを外部から変更したことをCairoに伝える */
+    cairo_surface_mark_dirty(sf);
+#endif
+
     return 1;
 }
 

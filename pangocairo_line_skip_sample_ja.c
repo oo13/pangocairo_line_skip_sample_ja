@@ -127,25 +127,14 @@ int setup(struct LayoutInfo *out)
     pango_font_metrics_unref(metrics);
     const int font_height = conv_pango_to_pixel(ascent + descent);
 
-
     /* フォントデスクリプタはもう不要 */
     pango_font_description_free(font_desc);
+
 
     out->cr = cr;
     out->layout = layout;
     out->font_height = font_height;
     return 1;
-}
-
-
-
-/*
-  PangoCairoの後始末
-*/
-void cleanup(const struct LayoutInfo *in)
-{
-    cairo_destroy(in->cr);
-    g_object_unref(in->layout);
 }
 
 
@@ -341,9 +330,18 @@ int render(const char *text, const char *output_filename, const struct LayoutInf
     /* サーフェスをファイルに出力 */
     cairo_surface_write_to_png(sf, output_filename);
 
-    /* 後始末 */
-
     return 1;
+}
+
+
+
+/*
+  PangoCairoの後始末
+*/
+void cleanup(const struct LayoutInfo *in)
+{
+    cairo_destroy(in->cr);
+    g_object_unref(in->layout);
 }
 
 

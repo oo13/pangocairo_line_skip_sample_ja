@@ -1,0 +1,2 @@
+# pangocairo_line_skip_sample_ja
+PangoCairoを使った文字列描画で行間を手動で制御するサンプルプログラム

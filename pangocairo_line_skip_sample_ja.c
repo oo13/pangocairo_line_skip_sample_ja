@@ -64,10 +64,10 @@ struct LayoutInfo {
 int setup(struct LayoutInfo *out)
 {
     /*** FontConfigのセットアップ ***/
-    /* システムフォントではなくて、カレントのfontsの下にあるフォントを使う。お好みで */
+    /* システムフォントだけではなくて、カレントのfontsの下にあるフォントも使う。お好みで */
     if (!FcConfigAppFontAddDir(0, (const FcChar8*)"fonts")) {
         fputs("Error in FcConfigAppFontAddDir().\n", stderr);
-        /* ここはエラーしたも無視 */
+        /* ここはエラーしても無視 */
         fputs("Ignored.\n", stderr);
     }
 
@@ -123,8 +123,9 @@ int setup(struct LayoutInfo *out)
     PangoFontMetrics *metrics = pango_context_get_metrics(context, font_desc, lang);
     const int ascent = pango_font_metrics_get_ascent(metrics);
     const int descent = pango_font_metrics_get_descent(metrics);
-    /* ascent + descentがフォントの高さ pixel だと思っていい */
+    /* ascent + descentがフォントの高さだと思っていい */
     pango_font_metrics_unref(metrics);
+    /* フォントの高さをpixel単位にする */
     const int font_height = conv_pango_to_pixel(ascent + descent);
 
     /* フォントデスクリプタはもう不要 */
@@ -217,7 +218,7 @@ int render(const char *text, const char *output_filename, const struct LayoutInf
       表示する文字列の領域の大きさを得る。
       ここでは不要だけど処理のサンプル。
 
-      イメージ領域からはみださずに描くにはこれが収まっているか確認する必要がある。
+      イメージ領域からはみださずに全体を描くにはこれが収まっているか確認する必要がある。
     */
     int text_width;
     int text_height;

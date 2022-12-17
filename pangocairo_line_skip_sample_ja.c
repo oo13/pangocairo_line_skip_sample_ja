@@ -185,17 +185,17 @@ int render(const char *text, const char *output_filename, const struct LayoutInf
         text_to_render = text;
     } else {
         text_to_render = text_without_markup;
+        /*
+          アトリビュートをレイアウトに設定。
+          アトリビュートのないtextを出力するなら呼ぶ必要はない。
+        */
+        pango_layout_set_attributes(layout, al);
     }
     /*
       文字列をレイアウトに設定。
       マークアップをサポートしないのなら、textを直接指定すればよい。
     */
     pango_layout_set_text(layout, text_to_render, -1);
-    /*
-      アトリビュートをレイアウトに設定。
-      アトリビュートのないtextを出力するなら呼ぶ必要はない。
-    */
-    pango_layout_set_attributes(layout, al);
     /* 取得した文字列とアトリビュートはもう不要。*/
     pango_attr_list_unref(al);
     g_free(text_without_markup);
